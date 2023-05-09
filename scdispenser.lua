@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Skillchain Dispenser'
 _addon.author = 'TakeItCheesy'
-_addon.version = '1.2.2'
+_addon.version = '1.2.3'
 _addon.command = 'scd'
 _addon.commands = {'sc', 'element', 'burst', 'ebullience', 'tier', 'cancel'}
 
@@ -68,16 +68,6 @@ function init()
 			Skillchain.Dark['2'] = {skillchain='Gravitation', opener='Aero', closer='Noctohelix', mbhelix='Noctohelix II', delay=6}
 	
 	Tier = '2'
-	
-	Colors = T{}
-		Colors.Fire = {204, 0, 0} 
-		Colors.Water = {0, 102, 204}
-		Colors.Aero = {51, 102, 0}
-		Colors.Light = {255, 255, 255}
-		Colors.Stone = {139, 139, 19}
-		Colors.Blizzard = {0, 204, 204}
-		Colors.Thunder = {102, 0, 204}
-		Colors.Dark = {0, 0, 0}
 					
 	Burst = T{'off', 'on', 'helix'}
 	Burst_index = 1
@@ -86,6 +76,8 @@ function init()
 	BurstMode = Burst[Burst_index]
 	CurrentElement = Elements[Ele_index]	
 	Color = Colors[CurrentElement]
+	
+	MsgColor  = 123
 	
 	SCactive = false
 	StepOne = false
@@ -97,6 +89,16 @@ function init()
 		pos = { x=0, y=0 },
 		padding = 5,
 		text = { size=12, font='Impact' }
+		colors = {
+			Fire = {204, 0, 0} 
+			Water = {0, 102, 204}
+			Aero = {51, 102, 0}
+			Light = {255, 255, 255}
+			Stone = {139, 139, 19}
+			Blizzard = {0, 204, 204}
+			Thunder = {102, 0, 204}
+			Dark = {0, 0, 0}
+		}
 	}
 	
 	Settings = config.load('data\\settings.xml', Defaults)
@@ -122,17 +124,21 @@ function save_pos()
 	Settings:save('all')	
 end
 
+function hide ()
+	HUD:hide()
+end
+
 function make_boom(arg)
 	if SCactive then
-		windower.add_to_chat(063, 'Skillchain already in progress, cancel or wait for it to finish.')
+		windower.add_to_chat(MsgColor, 'Skillchain already in progress, cancel or wait for it to finish.')
 	else
 		--checks for dark arts/addendum black
 		if not (buff_check(359) or buff_check(402)) then
-			windower.add_to_chat(063, 'Dark Arts not active, skillchain aborted.')
+			windower.add_to_chat(MsgColor, 'Dark Arts not active, skillchain aborted.')
 			return
 			--disables burst mode if addendum black is not active, still makes skillchain
 		elseif BurstMode == 'on' and not buff_check(402) then
-			windower.add_to_chat(063, 'Addendum: Black not active. Turning Burst mode off.')
+			windower.add_to_chat(MsgColor, 'Addendum: Black not active. Turning Burst mode off.')
 			BurstMode = 'off'
 			Burst_index = 1
 			update_hud()
@@ -148,7 +154,7 @@ function make_boom(arg)
 		
 		--checks if we have a target and that it's not a player
 		if not Targeted or not Targeted.is_npc or Targeted.name == 'Luopan' then
-			windower.add_to_chat(063, 'Invalid target, skillchain aborted.')
+			windower.add_to_chat(MsgColor, 'Invalid target, skillchain aborted.')
 			return
 		end
 		
@@ -198,31 +204,31 @@ function make_boom(arg)
 			recharge = 33
 		end
 		local recast = windower.ffxi.get_ability_recasts()[231] or 0	
-		--windower.add_to_chat(063, recast)
+		--windower.add_to_chat(MsgColor, recast)
 		if Liquefusion then
 			if recast > 2 * recharge + 13 then
-				windower.add_to_chat(063, 'Not enough stratagems, skillchain aborted.')
+				windower.add_to_chat(MsgColor, 'Not enough stratagems, skillchain aborted.')
 				return
 			end
 		else
 			if recast > 3 * recharge + 5 then
-				windower.add_to_chat(063, 'Not enough stratagems, skillchain aborted.')
+				windower.add_to_chat(MsgColor, 'Not enough stratagems, skillchain aborted.')
 				return
 			end
 		end		
 		
 		--check spell recasts
 		if check_recast(SCopener) > 1 then
-			windower.add_to_chat(063, SCopener..' not ready, skillchain aborted.')
+			windower.add_to_chat(MsgColor, SCopener..' not ready, skillchain aborted.')
 			return
 		end
 		if check_recast(SCcloser) > 5 then
-			windower.add_to_chat(063, SCcloser..' not ready, skillchain aborted.')
+			windower.add_to_chat(MsgColor, SCcloser..' not ready, skillchain aborted.')
 			return
 		end
 		if Liquefusion then
 			if check_recast('Ionohelix') > 13 then
-				windower.add_to_chat(063, 'Ionohelix not ready, skillchain aborted.')
+				windower.add_to_chat(MsgColor, 'Ionohelix not ready, skillchain aborted.')
 				return
 			end
 		end
@@ -289,12 +295,12 @@ function step_burst()
 	StepBurst = false
 	coroutine.schedule(function() 
 		SCactive = false 
-		windower.add_to_chat(063, 'Ready to start next skillchain.') 
+		windower.add_to_chat(MsgColor, 'Ready to start next skillchain.') 
 	end, 5)	
 end
 
 function fourstep()
-	windower.add_to_chat(063, 'Starting 4-step.')
+	windower.add_to_chat(MsgColor, 'Starting 4-step.')
 	local SCtarget = Targeted.id	
 	local delay = 0
 	windower.chat.input:schedule(delay, '/ma Stone '..SCtarget)
@@ -307,7 +313,7 @@ function fourstep()
 end
 
 function sixstep()
-	windower.add_to_chat(063, 'Starting 6-step.')
+	windower.add_to_chat(MsgColor, 'Starting 6-step.')
 	local SCtarget = Targeted.id
 	local delay = 0	
 	--if immanence is already active assumes you waited long enough and go
@@ -321,7 +327,7 @@ function sixstep()
 	else 
 		windower.chat.input('/ja Immanence <me>')
 		delay = 15
-		windower.add_to_chat(063, 'Waiting 15 seconds for stratagems.')
+		windower.add_to_chat(MsgColor, 'Waiting 15 seconds for stratagems.')
 	end	
 	windower.chat.input:schedule(delay, '/ma Stone '..SCtarget)
 	windower.chat.input:schedule(delay + 4, '/ja Immanence <me>') 
@@ -368,19 +374,18 @@ function buff_check(check)
 	--377 = tabula rasa
 end
 
-function update_element()
-	CurrentElement = Elements[Ele_index]
-	Color = Colors[CurrentElement]
-end
-
 function update_hud()
 	if windower.ffxi.get_player()['main_job_id'] ~= 20 then 
-		HUD:hide()
+		hide()
 		return 
 	end
+	
+	CurrentElement = Elements[Ele_index]
+	Color = Settings.colors[CurrentElement]
 
 	HUD:text('Element: '..CurrentElement..'\n'..'Tier: '..tostring(Tier)..'\n'..'Burst: '..BurstMode..'\n'..'Ebullience: '..tostring(Ebullience))
 	HUD:color(Color[1], Color[2], Color[3])
+	
 	if CurrentElement == 'Dark' then
 		HUD:stroke_alpha(100)
 	else
@@ -398,25 +403,22 @@ handle_commands = function(...)
 		if cmd == 'sc' then
 			make_boom(args)
 			if args[1] ~= nil and not S{'liquefusion', 'fourstep', 'sixstep'}:contains(args[1]) and not SCactive then
-				windower.add_to_chat(063, "Invalid argument for skillchain, starting skillchain of selected element.")
+				windower.add_to_chat(MsgColor, "Invalid argument for skillchain, starting skillchain of selected element.")
 			end
 		elseif cmd == 'element' then
 			if args[1] ~= nil and Elements:contains(args[1]) then
 				Ele_index = table.find(Elements, args[1])
-				update_element()				
 				update_hud()
 			elseif args[1] and args[1] == 'back' then
 				Ele_index = Ele_index - 1
 				if Ele_index < 1 then
 					Ele_index = #Elements
-				end
-				update_element()				
+				end			
 				update_hud()				
 			elseif args[1] ~= nil then
-				windower.add_to_chat(063, "Invalid element, valid options are:  'Fire', 'Stone', 'Water', 'Aero', 'Blizzard', 'Thunder', 'Light' or 'Dark'.")
+				windower.add_to_chat(MsgColor, "Invalid element, valid options are:  'Fire', 'Stone', 'Water', 'Aero', 'Blizzard', 'Thunder', 'Light' or 'Dark'.")
 			else
 				Ele_index = Ele_index % 8 + 1 
-				update_element()
 				update_hud()
 			end
 		elseif cmd == 'burst' then
@@ -424,7 +426,7 @@ handle_commands = function(...)
 				BurstMode = args[1]
 				update_hud()
 			elseif args[1] ~= nil then
-				windower.add_to_chat(063, "Invalid option for Burst, valid options are:  'On', 'Off' or 'Helix'.")
+				windower.add_to_chat(MsgColor, "Invalid option for Burst, valid options are:  'On', 'Off' or 'Helix'.")
 			else
 				Burst_index = Burst_index % 3 + 1
 				BurstMode = Burst[Burst_index]
@@ -454,7 +456,7 @@ handle_commands = function(...)
 			StepThree = false
 			StepBurst = false
 			SCactive = false	
-			windower.add_to_chat(063, 'Cancelling current skillchain, please give it a second before starting another.')
+			windower.add_to_chat(MsgColor, 'Cancelling current skillchain, please give it a second before starting another.')
 		end
 	end
 end
@@ -490,6 +492,8 @@ windower.register_event('addon command', handle_commands)
 windower.register_event('load', init)
 
 windower.register_event('unload', save_pos)
+
+windower.register_event('logout', hide)
 
 windower.register_event('job change', update_hud)
  

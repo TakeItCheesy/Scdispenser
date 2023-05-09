@@ -1,5 +1,5 @@
 **Author:** TakeItCheesy<br>
-**Version:** 1.2.2<br>
+**Version:** 1.2.3<br>
 **Abbreviations:** scd<br>
 
 # SC-Dispenser
@@ -48,6 +48,10 @@ SC-Dispenser is a simple addon for making skillchains using immanence on a schol
 	* `/con scd cancel`
 
 ## Changes:
+
+### v1.2.3
+ * HUD is now hidden on logout
+ * Misc. code cleanup
 
 ### v1.2.2
  * Now checks stratagem + spell recasts before starting.
