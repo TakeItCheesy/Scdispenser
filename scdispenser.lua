@@ -74,8 +74,6 @@ function init()
 	Ebullience = 'off'
 
 	BurstMode = Burst[Burst_index]
-	CurrentElement = Elements[Ele_index]	
-	Color = Colors[CurrentElement]
 	
 	MsgColor  = 123
 	
@@ -116,16 +114,6 @@ function init()
 	HUD:pad(Settings.padding)
 
 	update_hud()
-end
-
-function save_pos() 
-	Settings.pos.x = HUD:pos_x()
-	Settings.pos.y = HUD:pos_y()
-	Settings:save('all')	
-end
-
-function hide ()
-	HUD:hide()
 end
 
 function make_boom(arg)
@@ -374,6 +362,16 @@ function buff_check(check)
 	--377 = tabula rasa
 end
 
+function save_pos() 
+	Settings.pos.x = HUD:pos_x()
+	Settings.pos.y = HUD:pos_y()
+	Settings:save('all')	
+end
+
+function hide ()
+	HUD:hide()
+end
+
 function update_hud()
 	if windower.ffxi.get_player()['main_job_id'] ~= 20 then 
 		hide()
@@ -394,6 +392,17 @@ function update_hud()
 	
 	save_pos()
 	HUD:show()
+end
+
+function help()
+    print('Commands: ')
+    print(' - help: 	displays this help text')
+    print(' - sc [liquefusion][fourstep][sixstep]: 	starts making selected skillchain')
+    print(' - element [Element][back]: 	cycles through the different elements')
+    print(' - burst [on][off][helix]: 	cycles bursting modes')
+    print(' - ebullience: 	toggles ebulliance usage')
+    print(' - tier [1][2]: 	cycles skillchain tier')
+    print(' - cancel: 	attempts to cancel current skillchain')
 end
 
 handle_commands = function(...)
@@ -450,6 +459,8 @@ handle_commands = function(...)
 				end
 			end
 			update_hud()
+		elseif cmd == 'help' then
+			help()
 		elseif cmd == 'cancel' then
 			StepOne = false
 			StepTwo = false
