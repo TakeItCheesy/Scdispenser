@@ -30,7 +30,7 @@ _addon.name = 'Skillchain Dispenser'
 _addon.author = 'TakeItCheesy'
 _addon.version = '1.2.3'
 _addon.command = 'scd'
-_addon.commands = {'sc', 'element', 'burst', 'ebullience', 'tier', 'cancel'}
+_addon.commands = {'sc', 'element', 'burst', 'ebullience', 'tier', 'cancel', 'help'}
 
 require('tables')
 texts = require('texts')
@@ -71,6 +71,7 @@ function init()
 					
 	Burst = T{'off', 'on', 'helix'}
 	Burst_index = 1
+	
 	Ebullience = 'off'
 
 	BurstMode = Burst[Burst_index]
@@ -400,7 +401,7 @@ function help()
     print(' - sc [liquefusion][fourstep][sixstep]: 	starts making selected skillchain')
     print(' - element [Element][back]: 	cycles through the different elements')
     print(' - burst [on][off][helix]: 	cycles bursting modes')
-    print(' - ebullience: 	toggles ebulliance usage')
+    print(' - ebullience: 	toggles ebullience usage')
     print(' - tier [1][2]: 	cycles skillchain tier')
     print(' - cancel: 	attempts to cancel current skillchain')
 end
@@ -433,9 +434,10 @@ handle_commands = function(...)
 		elseif cmd == 'burst' then
 			if args[1] ~= nil and Burst:contains(args[1]) then
 				BurstMode = args[1]
+				Burst_index = table.find(Burst, args[1])
 				update_hud()
 			elseif args[1] ~= nil then
-				windower.add_to_chat(MsgColor, "Invalid option for Burst, valid options are:  'On', 'Off' or 'Helix'.")
+				windower.add_to_chat(MsgColor, "Invalid option for Burst, valid options are:  'on', 'off' or 'helix'.")
 			else
 				Burst_index = Burst_index % 3 + 1
 				BurstMode = Burst[Burst_index]
