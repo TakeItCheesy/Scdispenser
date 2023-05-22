@@ -87,17 +87,17 @@ function init()
 	Defaults = T{	
 		pos = { x=0, y=0 },
 		padding = 5,
-		text = { size=12, font='Impact' }
+		text = { size=12, font='Impact'},
 		colors = {
-			Fire = {204, 0, 0} 
-			Water = {0, 102, 204}
-			Aero = {51, 102, 0}
-			Light = {255, 255, 255}
-			Stone = {139, 139, 19}
-			Blizzard = {0, 204, 204}
-			Thunder = {102, 0, 204}
-			Dark = {0, 0, 0}
-		}
+			Fire = {204, 0, 0},
+			Water = {0, 102, 204},
+			Aero = {51, 102, 0},
+			Light = {255, 255, 255},
+			Stone = {139, 139, 19},
+			Blizzard = {0, 204, 204},
+			Thunder = {102, 0, 204},
+			Dark = {0, 0, 0},
+		},
 	}
 	
 	Settings = config.load('data\\settings.xml', Defaults)
@@ -231,7 +231,7 @@ function make_boom(arg)
 			coroutine.schedule(step_three, 14) 
 		end
 		coroutine.schedule(step_burst, MBdelay)
-		windower.send_command('timer c "SC IN PROGRESS" '..MBdelay..' up spells/00247.png')
+		windower.send_command('timers c "SC IN PROGRESS" '..MBdelay..' up spells/00247.png')
 	end
 end
 
