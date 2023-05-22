@@ -230,7 +230,8 @@ function make_boom(arg)
 		if Liquefusion then
 			coroutine.schedule(step_three, 14) 
 		end
-		coroutine.schedule(step_burst, MBdelay) 	
+		coroutine.schedule(step_burst, MBdelay)
+		windower.send_command('timer c "SC IN PROGRESS" '..MBdelay..' up spells/00247.png')
 	end
 end
 
@@ -397,7 +398,7 @@ end
 
 function help()
     print('Commands: ')
-    print(' - help: 	displays this help text')
+    print(' - help:  displays this help text')
     print(' - sc [liquefusion][fourstep][sixstep]: 	starts making selected skillchain')
     print(' - element [Element][back]: 	cycles through the different elements')
     print(' - burst [on][off][helix]: 	cycles bursting modes')
@@ -470,6 +471,7 @@ handle_commands = function(...)
 			StepBurst = false
 			SCactive = false	
 			windower.add_to_chat(MsgColor, 'Cancelling current skillchain, please give it a second before starting another.')
+			windower.send_command('timers d "SC IN PROGRESS"')
 		end
 	end
 end
