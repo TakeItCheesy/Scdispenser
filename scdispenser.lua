@@ -28,7 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Skillchain Dispenser'
 _addon.author = 'TakeItCheesy'
-_addon.version = '1.2.3'
+_addon.version = '1.2.4'
 _addon.command = 'scd'
 _addon.commands = {'sc', 'element', 'burst', 'ebullience', 'tier', 'cancel', 'help'}
 
@@ -254,7 +254,7 @@ function step_two()
 	end
 	StepTwo = false
 	windower.chat.input('/ja Immanence <me>')
-	windower.chat.input:schedule(1.5 , '/p Closing SC: '..translate(SCname)..' - MB: '..translate(SCelement)..' now!')
+	windower.chat.input('/p Closing SC: '..translate(SCname)..' - MB: '..translate(SCelement)..' now!')
 	windower.chat.input:schedule(1.5 , '/ma '..SCcloser..' '..SCtarget)
 end
 
@@ -263,7 +263,7 @@ function step_three()
 	StepBurst = true
 	StepThree = false
 	windower.chat.input('/ja Immanence <me>' )
-	windower.chat.input:schedule(1.5, '/p Closing SC: '..translate('Fusion')..' - MB: '..translate('Fire')..' now!')
+	windower.chat.input('/p Closing SC: '..translate('Fusion')..' - MB: '..translate('Fire')..' now!')
 	windower.chat.input:schedule(1.5, '/ma Ionohelix '..SCtarget)
 end
 

@@ -1,5 +1,5 @@
 **Author:** TakeItCheesy<br>
-**Version:** 1.2.3<br>
+**Version:** 1.2.4<br>
 **Abbreviations:** scd<br>
 
 # SC-Dispenser
@@ -48,6 +48,9 @@ SC-Dispenser is a simple addon for making skillchains using immanence on a schol
 	* `/con scd cancel`
 
 ## Changes:
+
+### v1.2.4
+ * "Closing" messages now happen at the same time as the closing immmance, the actual spell goes off 1.5 second later
 
 ### v1.2.3
  * HUD is now hidden on logout
